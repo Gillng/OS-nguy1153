@@ -87,7 +87,9 @@ char* msg = MESSAGE;
 
 
 
- 
+ while (*msg){
+ *sc++=*msg++;
+ }
    
 start_simple_program();
 
