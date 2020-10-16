@@ -1,7 +1,3 @@
-// XMega65 Kernal Development Template
-// Each function of the kernal is a no-args function
-// The functions are placed in the SYSCALLS table surrounded by JMP and NOP
-
 import "string"
 
 
@@ -97,6 +93,7 @@ unsigned short mem = $D000;
 
 unsigned short is_found_vicii = $0;
 unsigned short is_found_mos6526 = $0;
+/*struct device_memory_allocation{
 
 unsigned short first_address;
 unsigned short last_address;
@@ -106,35 +103,40 @@ device_memory_allocation;
 unsigned char device_allocation_count;*/
 
 while(mem<$DFF0){
-if(mem<=$D800 || mem>=$DBFF){
+//if(mem<=$D800 || mem>=$DBFF){
 is_found_vicii = detect_vicii(mem);
 if(is_found_vicii > $0){
 print_newline();
-print_to_screen("vic-ii detected at $");
-print_hex(mem);
-print_to_screen("--$");
-print_hex(is_found_vicii);
+print_to_screen("found vic-ii");
 mem=is_found_vicii;
-
+is_found_vicii=$0;
 }
+
+
 is_found_mos6526 = detect_mos6526(mem);
 if(is_found_mos6526>$0){
 print_newline();
-print_to_screen("mos6526 detected at $");
-print_hex(mem);
-print_to_screen("--$");
-print_hex(is_found_mos6526);
+print_to_screen("found mos6526");
 mem=is_found_mos6526;
 is_found_mos6526=$0;
 }
-}
+
+
+//}
 
 mem++;
 }
 
 print_newline();
 print_to_screen("finished probing devices");
-
+for(unsigned char i=0; i<device_allocation_count;i++){
+print_newline();
+print_to_screen(device_memory_allocations[i].device_name);
+print_to_screen("at");
+print_hex(device_memory_allocations[i].first_address);
+print_to_screen("to");
+print_hex(device_memory_allocation[i].last_address);
+}
 }
 
 unsigned short detect_mos6526(unsigned short address){
@@ -160,7 +162,7 @@ struct device_memory_allocation items;
 item.device_name="mos6526";
 item.first_address = address+$0000;
 item.last_address=address+$00FF;
-addItemToArray(item0;
+addItemToArray(item);
 
 return address +$FF;
 }
@@ -235,24 +237,7 @@ exit_hypervisor();
 }
 
 void main(){
-*VIC_MEMORY = 0x14;
-memset(SCREEN,' ',40*25);
-memset(COLS,WHITE,40*25);
-char*sc=SCREEN+40;
-char*msg=MESSAGE;
-while(*msg){
-*sc++=*msg++;
-}
-/*
-while(true){
-if(*RASTER==54 || *RASTER==66){
-*BGCOL=WHITE;
-}
-else{
-*BGCOL=BLACK;
-}
-}
-*/
+
 }
  
 void syscall00() {exit_hypervisor();}
@@ -439,7 +424,7 @@ void syscall23() {
  
  
  
-void pagfault(){exit_hypervisor ();}
+
 void restorkey(){exit_hypervisor();}
 void alttabkey(){exit_hypervisor();}
 void vf011rd(){exit_hypervisor();}
@@ -538,59 +523,58 @@ export align (0x100) struct SysCall[] TRAPS = {
      { JMP, &vf011rd, NOP },
      { JMP, &vf011wr, NOP },
      { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &reserved, NOP },
-     { JMP, &cpukil, NOP }
+     { JMP, &cpukil, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP },
+     { JMP, &undefined_trap, NOP }
+     
+     
+      
 };
-
-void exit_hypervisor()
+void exit_hyperviso()
 {
-*(unsigned char *)$D67F=$01;
+*(unsigned char*)$D67F=$01;
 }
+
+
 
