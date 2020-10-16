@@ -13,6 +13,32 @@ const char WHITE = 1;
 
 char[] MESSAGE = "checkpoint4.1 by nguy1153";
 
+void main(){
+/**VIC_MEMORY=0x14;
+memset(SCREEN,' ',40*25);
+memset(COLS,WHITE,40*25);
+char* sc = SCREEN+40; 
+char* msg = MESSAGE;
+
+while(*msg){
+*sc++=*msg++;
+}
+
+while(true){
+if(*RASTER==54 || *RASTER==66){
+*BGCOL=WHITE;
+}
+else{
+*BGCOL=BLACK;
+}
+}
+*/
+}
+
+
+
+
+
 
 
 void start_simple_program(){
@@ -43,8 +69,11 @@ exit_hypervisor();
 
 }
 
-void main(){
-}
+
+
+unsigned char *current_screen_line = $0400;
+unsigned char current_screen_x = 0;
+
 void reset(){
 
 *VIC_MEMORY = 0x14;
@@ -55,14 +84,16 @@ memset(COLS,WHITE,40*25);
    
 char* sc = SCREEN+40; 
 char* msg = MESSAGE; 
+
+
+
+ while (*msg){
+ *sc++=*msg++;
+ }
    
-while(*msg) {
-        *sc++ = *msg++;
-    }
-    
 start_simple_program();
 
-
+exit_hypervisor();
 }
     
 
@@ -139,14 +170,14 @@ void syscall3D() {exit_hypervisor();}
 void syscall3E() {exit_hypervisor();}
 void syscall3F() {exit_hypervisor();}
  
-
-void restorekey() {}
-void alttabkey() {}
-void vf011rd() {}
-void vf011wr() {}
-void reserved() {}
-void cpukil() {}
-void undefined_trap() {}
+void pagfault() {exit_hypervisor();}
+void restorekey() {exit_hypervisor();}
+void alttabkey() {exit_hypervisor();}
+void vf011rd() {exit_hypervisor();}
+void vf011wr() {exit_hypervisor();}
+void reserved() {exit_hypervisor();}
+void cpukil() {exit_hypervisor();}
+void undefined_trap() {exit_hypervisor();}
  
 void exit_hypervisor(){
  *(unsigned char*)$D67F=$01;}
