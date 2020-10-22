@@ -14,9 +14,11 @@ const char WHITE = 1;
 char[] MESSAGE = "checkpoint4.1 by nguy1153";
 
 void main(){
+
 /**VIC_MEMORY=0x14;
 memset(SCREEN,' ',40*25);
 memset(COLS,WHITE,40*25);
+
 char* sc = SCREEN+40; 
 char* msg = MESSAGE;
 
@@ -31,8 +33,8 @@ if(*RASTER==54 || *RASTER==66){
 else{
 *BGCOL=BLACK;
 }
-}
-*/
+
+}*/
 }
 
 
@@ -69,43 +71,24 @@ exit_hypervisor();
 
 }
 
-
-
-unsigned char *current_screen_line = $0400;
-unsigned char current_screen_x = 0;
-
-void reset(){
-
-*VIC_MEMORY = 0x14;
-   
-memset(SCREEN,' ',40*25);
-    
-memset(COLS,WHITE,40*25);
-   
-char* sc = SCREEN+40; 
-char* msg = MESSAGE; 
+void exit_hypervisor(){
+ *(unsigned char*)$D67F=$01;}
 
 
 
- while (*msg){
- *sc++=*msg++;
- }
-   
-start_simple_program();
 
-exit_hypervisor();
-}
     
 
-void syscall00() {exit_hypervisor();}
+
 void syscall01() {
-     *(SCREEN+79) = ')';
+     /**(SCREEN+79) = ')';
      exit_hypervisor();
-     }
+     */}
 
 void syscall02() {
-     *(SCREEN+78) = '(';
+     /*(SCREEN+78) = '(';
      exit_hypervisor();
+     */
 }
 
 void syscall03() {exit_hypervisor();}
@@ -170,6 +153,29 @@ void syscall3D() {exit_hypervisor();}
 void syscall3E() {exit_hypervisor();}
 void syscall3F() {exit_hypervisor();}
  
+ 
+ void reset(){
+
+*VIC_MEMORY = 0x14;
+   
+memset(SCREEN,' ',40*25);
+    
+memset(COLS,WHITE,40*25);
+   
+char* sc = SCREEN+40; 
+char* msg = MESSAGE; 
+
+
+
+ while (*msg){
+ *sc++=*msg++;
+ }
+   
+start_simple_program();
+
+exit_hypervisor();
+}
+
 void pagfault() {exit_hypervisor();}
 void restorekey() {exit_hypervisor();}
 void alttabkey() {exit_hypervisor();}
@@ -179,8 +185,7 @@ void reserved() {exit_hypervisor();}
 void cpukil() {exit_hypervisor();}
 void undefined_trap() {exit_hypervisor();}
  
-void exit_hypervisor(){
- *(unsigned char*)$D67F=$01;}
+
 
 #pragma data_seg(Syscall)
 
@@ -258,8 +263,8 @@ export struct SysCall[] SYSCALLS = {
      { JMP,&syscall3C,NOP},
      { JMP,&syscall3D,NOP},
      { JMP,&syscall3E,NOP},
-     { JMP,&syscall3F,NOP},
-     { JMP,&syscall00,NOP}
+     { JMP,&syscall3F,NOP}
+     
      
      };
      
@@ -273,50 +278,8 @@ export align(0x100) struct SysCall[] TRAPS = {
      { JMP, &vf011wr, NOP },
      { JMP, &reserved, NOP },
      { JMP, &cpukil, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
-     { JMP, &undefined_trap, NOP },
      { JMP, &undefined_trap, NOP }
-         
+     
 };
  
 
