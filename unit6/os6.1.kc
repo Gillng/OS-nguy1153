@@ -207,7 +207,9 @@ p->storage_end_address=$31FFF + (((unsigned dword)pdb_number)*$2000);
 
   //XXX - Set all 64 bytes of the array 'ss' to zero, to clear the context
   //switching state
-  for(i=0;i<63;i++) ss[i] = $00;
+  for(i=0;i<63;i++) {
+  ss[i] = $00;
+  }
 
   // Set tandard CPU flags (8-bit stack, interrupts disabled)
   ss[7] = $24;
@@ -530,7 +532,7 @@ void syscall05() {
 unsigned char next_pdb=running_pdb;
 pause_pdb(running_pdb);
 
-for(byte i=0;i=<8;i++){
+for(byte i=0;i<8;i++){
 if(i==next_pdb)continue;
 struct process_descriptor_block*pdb=
 (struct process_descriptor_block*)((unsigned short)stored_pdbs+(((unsigned short)i)<<8));
@@ -663,7 +665,7 @@ void reset() {
     
     //Start with empty message queue
     ipc_message_count=0;
-    queue_message(0,1,1,1,"cpoint 6.1 ");
+    queue_message(0,1,1,1," cpoint 6.1 ");
     initialise_pdb(0,"program1.prg");
     
     //load the program
@@ -683,13 +685,13 @@ void reset() {
     
 
 void pagfault(){exit_hypervisor ();}
-void restorekey() {}
-void alttabkey() {}
-void vf011rd() {}
-void vf011wr() {}
-void reserved() {}
-void cpukil() {}
-void undefined_trap() {}
+void restorekey() {exit_hypervisor ();}
+void alttabkey() {exit_hypervisor ();}
+void vf011rd() {exit_hypervisor ();}
+void vf011wr() {exit_hypervisor ();}
+void reserved() {exit_hypervisor ();}
+void cpukil() {exit_hypervisor ();}
+void undefined_trap() {exit_hypervisor ();}
 
 //We will have 16 slots of 16 bytes at $CB00-$CBFF
 const unsigned char *ipc_messages=$CB00;
